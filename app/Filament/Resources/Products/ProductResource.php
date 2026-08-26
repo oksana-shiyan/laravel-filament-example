@@ -13,9 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
+use UnitEnum;
 
 class ProductResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Product::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
@@ -24,7 +28,22 @@ class ProductResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+    protected static string|UnitEnum|null $navigationGroup = 'Catalog';
+
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        return __('catalog.navigation.catalog');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('catalog.product');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('catalog.products');
+    }
 
     public static function form(Schema $schema): Schema
     {

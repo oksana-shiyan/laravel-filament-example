@@ -13,9 +13,27 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         foreach ([
-            ['name' => 'Electronics', 'slug' => 'electronics'],
-            ['name' => 'Office', 'slug' => 'office'],
-            ['name' => 'Accessories', 'slug' => 'accessories'],
+            [
+                'slug' => 'electronics',
+                'name' => [
+                    'en' => 'Electronics',
+                    'uk' => 'Електроніка',
+                ],
+            ],
+            [
+                'slug' => 'office',
+                'name' => [
+                    'en' => 'Office',
+                    'uk' => 'Офіс',
+                ],
+            ],
+            [
+                'slug' => 'accessories',
+                'name' => [
+                    'en' => 'Accessories',
+                    'uk' => 'Аксесуари',
+                ],
+            ],
         ] as $category) {
             Category::query()->updateOrCreate(
                 ['slug' => $category['slug']],

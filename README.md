@@ -38,6 +38,10 @@ docker compose exec php-fpm ./vendor/bin/pest
 
 ## What you can demo
 
+**Language switch (EN / UK)**
+- Topbar language switcher (also on the login page)
+- Product and category names/descriptions are translatable (edit with the locale switcher on resource pages)
+
 **Dashboard (`/`)**
 - Stats cards: products, low stock, categories, comments
 
@@ -69,4 +73,5 @@ docker compose exec php-fpm php artisan test
 
 - Laravel 12, Filament 5, Livewire, Pest
 - PostgreSQL via Docker
+- `bezhansalleh/filament-language-switch`, `spatie/laravel-translatable`, `lara-zeus/spatie-translatable`
 - Leftover Vue/npm packages in the repo are unused; the running app does not depend on them

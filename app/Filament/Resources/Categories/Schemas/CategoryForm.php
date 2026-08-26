@@ -12,6 +12,7 @@ class CategoryForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label(__('catalog.fields.name'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('slug')

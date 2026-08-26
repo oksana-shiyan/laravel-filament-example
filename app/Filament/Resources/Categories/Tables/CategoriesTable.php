@@ -8,6 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CategoriesTable
 {
@@ -16,7 +17,14 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label(__('catalog.fields.name'))
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $operator = $query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+
+                        return $query
+                            ->where('name->en', $operator, "%{$search}%")
+                            ->orWhere('name->uk', $operator, "%{$search}%");
+                    }),
                 TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('created_at')

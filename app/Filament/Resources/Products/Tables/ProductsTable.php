@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductsTable
@@ -27,26 +28,35 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable()
+                    ->label(__('catalog.fields.name'))
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $operator = $query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+
+                        return $query
+                            ->where('name->en', $operator, "%{$search}%")
+                            ->orWhere('name->uk', $operator, "%{$search}%");
+                    })
                     ->sortable()
                     ->weight('medium'),
                 TextColumn::make('sku')
-                    ->label('SKU')
+                    ->label(__('catalog.fields.sku'))
                     ->searchable()
                     ->sortable()
                     ->copyable()
                     ->badge()
                     ->color('gray'),
                 TextColumn::make('category.name')
-                    ->label('Category')
+                    ->label(__('catalog.fields.category'))
                     ->badge()
                     ->color('info')
                     ->placeholder('—')
                     ->toggleable(),
                 TextColumn::make('price')
+                    ->label(__('catalog.fields.price'))
                     ->money()
                     ->sortable(),
                 TextColumn::make('stock')
+                    ->label(__('catalog.fields.stock'))
                     ->numeric()
                     ->sortable()
                     ->badge()
@@ -56,7 +66,7 @@ class ProductsTable
                         default => 'success',
                     }),
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label(__('catalog.fields.active'))
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -66,15 +76,15 @@ class ProductsTable
             ->filters([
                 SelectFilter::make('category_id')
                     ->relationship('category', 'name')
-                    ->label('Category'),
+                    ->label(__('catalog.fields.category')),
                 TernaryFilter::make('is_active')
-                    ->label('Active'),
+                    ->label(__('catalog.fields.active')),
                 SelectFilter::make('stock_level')
-                    ->label('Stock level')
+                    ->label(__('catalog.fields.stock_level'))
                     ->options([
-                        'out' => 'Out of stock',
-                        'low' => 'Low (1–10)',
-                        'ok' => 'In stock (11+)',
+                        'out' => __('catalog.fields.stock_out'),
+                        'low' => __('catalog.fields.stock_low'),
+                        'ok' => __('catalog.fields.stock_ok'),
                     ])
                     ->query(function ($query, array $data) {
                         return match ($data['value'] ?? null) {
@@ -87,29 +97,36 @@ class ProductsTable
             ])
             ->recordActions([
                 Action::make('restock')
-                    ->label('Restock')
+                    ->label(__('catalog.fields.restock'))
                     ->icon(Heroicon::OutlinedPlusCircle)
                     ->color('success')
-                    ->modalHeading('Restock product')
-                    ->modalDescription(fn (Product $record): string => "Current stock for {$record->name}: {$record->stock}")
-                    ->modalSubmitActionLabel('Add stock')
+                    ->modalHeading(__('catalog.fields.restock_heading'))
+                    ->modalDescription(fn (Product $record): string => __('catalog.fields.restock_description', [
+                        'name' => $record->name,
+                        'stock' => $record->stock,
+                    ]))
+                    ->modalSubmitActionLabel(__('catalog.fields.restock_submit'))
                     ->schema([
                         TextInput::make('quantity')
-                            ->label('Quantity to add')
+                            ->label(__('catalog.fields.quantity'))
                             ->numeric()
                             ->integer()
                             ->required()
                             ->minValue(1)
                             ->default(10)
-                            ->helperText('Enter how many units to add to stock.'),
+                            ->helperText(__('catalog.fields.quantity_helper')),
                     ])
                     ->action(function (Product $record, array $data): void {
                         $quantity = (int) $data['quantity'];
                         $record->increment('stock', $quantity);
 
                         Notification::make()
-                            ->title('Stock updated')
-                            ->body("Added {$quantity} units. {$record->name} now has {$record->fresh()->stock} units.")
+                            ->title(__('catalog.fields.stock_updated'))
+                            ->body(__('catalog.fields.stock_updated_body', [
+                                'quantity' => $quantity,
+                                'name' => $record->name,
+                                'stock' => $record->fresh()->stock,
+                            ]))
                             ->success()
                             ->send();
                     }),
@@ -119,7 +136,7 @@ class ProductsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('markInactive')
-                        ->label('Mark inactive')
+                        ->label(__('catalog.fields.mark_inactive'))
                         ->icon(Heroicon::OutlinedXCircle)
                         ->color('warning')
                         ->requiresConfirmation()
@@ -128,16 +145,18 @@ class ProductsTable
                             $records->each->update(['is_active' => false]);
 
                             Notification::make()
-                                ->title('Products updated')
-                                ->body($records->count().' product(s) marked inactive.')
+                                ->title(__('catalog.fields.products_updated'))
+                                ->body(__('catalog.fields.products_marked_inactive', [
+                                    'count' => $records->count(),
+                                ]))
                                 ->success()
                                 ->send();
                         }),
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No products yet')
-            ->emptyStateDescription('Create a product to get started.')
+            ->emptyStateHeading(__('catalog.fields.empty_heading'))
+            ->emptyStateDescription(__('catalog.fields.empty_description'))
             ->emptyStateActions([
                 CreateAction::make(),
             ]);

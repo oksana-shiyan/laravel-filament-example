@@ -17,9 +17,13 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name = fake()->unique()->words(2, true);
+        $title = Str::title($name);
 
         return [
-            'name' => Str::title($name),
+            'name' => [
+                'en' => $title,
+                'uk' => $title,
+            ],
             'slug' => Str::slug($name),
         ];
     }

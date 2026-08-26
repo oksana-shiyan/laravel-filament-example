@@ -18,63 +18,68 @@ class ProductForm
     {
         return $schema
             ->components([
-                Section::make('Basics')
-                    ->description('Core product identity and category.')
+                Section::make(__('catalog.fields.basics'))
+                    ->description(__('catalog.fields.basics_description'))
                     ->icon(Heroicon::OutlinedShoppingBag)
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('catalog.fields.name'))
                             ->required()
                             ->maxLength(255),
                         TextInput::make('sku')
-                            ->label('SKU')
+                            ->label(__('catalog.fields.sku'))
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
                         Select::make('category_id')
                             ->relationship('category', 'name')
+                            ->label(__('catalog.fields.category'))
                             ->searchable()
                             ->preload(),
                         Toggle::make('is_active')
-                            ->label('Active')
+                            ->label(__('catalog.fields.active'))
                             ->default(true)
                             ->inline(false),
                         Textarea::make('description')
+                            ->label(__('catalog.fields.description'))
                             ->columnSpanFull()
                             ->rows(3),
                     ]),
-                Section::make('Pricing & inventory')
-                    ->description('Sale price and available stock.')
+                Section::make(__('catalog.fields.pricing'))
+                    ->description(__('catalog.fields.pricing_description'))
                     ->icon(Heroicon::OutlinedCube)
                     ->columns(2)
                     ->schema([
                         TextInput::make('price')
+                            ->label(__('catalog.fields.price'))
                             ->required()
                             ->numeric()
                             ->minValue(0)
                             ->prefix('$'),
                         TextInput::make('stock')
+                            ->label(__('catalog.fields.stock'))
                             ->required()
                             ->numeric()
                             ->integer()
                             ->minValue(0)
                             ->default(0)
-                            ->helperText('Stock badges on the list use 0 / ≤10 / 11+ thresholds.'),
+                            ->helperText(__('catalog.fields.stock_helper')),
                     ]),
-                Section::make('Meta')
-                    ->description('Optional key-value attributes stored as JSON.')
+                Section::make(__('catalog.fields.meta'))
+                    ->description(__('catalog.fields.meta_description'))
                     ->icon(Heroicon::OutlinedTag)
                     ->collapsed()
                     ->schema([
                         KeyValue::make('meta')
-                            ->label('Attributes')
-                            ->keyLabel('Key')
-                            ->valueLabel('Value')
+                            ->label(__('catalog.fields.attributes'))
+                            ->keyLabel(__('catalog.fields.key'))
+                            ->valueLabel(__('catalog.fields.value'))
                             ->reorderable()
                             ->columnSpanFull(),
                     ]),
-                Section::make('Comments')
-                    ->description('Customer or internal notes for this product.')
+                Section::make(__('catalog.fields.comments'))
+                    ->description(__('catalog.fields.comments_description'))
                     ->icon(Heroicon::OutlinedChatBubbleLeftRight)
                     ->collapsed()
                     ->schema([

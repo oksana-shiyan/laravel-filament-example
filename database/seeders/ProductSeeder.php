@@ -20,9 +20,15 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'category_id' => $electronics?->id,
-                'name' => 'Wireless Mouse',
+                'name' => [
+                    'en' => 'Wireless Mouse',
+                    'uk' => 'Бездротова миша',
+                ],
                 'sku' => 'MOUSE-001',
-                'description' => 'Ergonomic wireless mouse with silent clicks.',
+                'description' => [
+                    'en' => 'Ergonomic wireless mouse with silent clicks.',
+                    'uk' => 'Ергономічна бездротова миша з тихими кліками.',
+                ],
                 'price' => 29.99,
                 'stock' => 42,
                 'is_active' => true,
@@ -33,9 +39,15 @@ class ProductSeeder extends Seeder
             ],
             [
                 'category_id' => $electronics?->id,
-                'name' => 'USB-C Hub',
+                'name' => [
+                    'en' => 'USB-C Hub',
+                    'uk' => 'USB-C хаб',
+                ],
                 'sku' => 'HUB-004',
-                'description' => '7-in-1 USB-C hub for laptops.',
+                'description' => [
+                    'en' => '7-in-1 USB-C hub for laptops.',
+                    'uk' => 'USB-C хаб 7-в-1 для ноутбуків.',
+                ],
                 'price' => 49.50,
                 'stock' => 18,
                 'is_active' => true,
@@ -46,9 +58,15 @@ class ProductSeeder extends Seeder
             ],
             [
                 'category_id' => $office?->id,
-                'name' => 'Notebook Set',
+                'name' => [
+                    'en' => 'Notebook Set',
+                    'uk' => 'Набір блокнотів',
+                ],
                 'sku' => 'NOTE-210',
-                'description' => 'Pack of three lined notebooks.',
+                'description' => [
+                    'en' => 'Pack of three lined notebooks.',
+                    'uk' => 'Набір із трьох зошитів у лінійку.',
+                ],
                 'price' => 12.00,
                 'stock' => 75,
                 'is_active' => true,
@@ -59,9 +77,15 @@ class ProductSeeder extends Seeder
             ],
             [
                 'category_id' => $office?->id,
-                'name' => 'Desk Lamp',
+                'name' => [
+                    'en' => 'Desk Lamp',
+                    'uk' => 'Настільна лампа',
+                ],
                 'sku' => 'LAMP-018',
-                'description' => 'LED desk lamp with adjustable brightness.',
+                'description' => [
+                    'en' => 'LED desk lamp with adjustable brightness.',
+                    'uk' => 'LED настільна лампа з регулюванням яскравості.',
+                ],
                 'price' => 38.00,
                 'stock' => 0,
                 'is_active' => false,
@@ -72,9 +96,15 @@ class ProductSeeder extends Seeder
             ],
             [
                 'category_id' => $accessories?->id,
-                'name' => 'Laptop Sleeve',
+                'name' => [
+                    'en' => 'Laptop Sleeve',
+                    'uk' => 'Чохол для ноутбука',
+                ],
                 'sku' => 'SLEEVE-13',
-                'description' => 'Padded 13-inch laptop sleeve.',
+                'description' => [
+                    'en' => 'Padded 13-inch laptop sleeve.',
+                    'uk' => 'М’який чохол для ноутбука 13 дюймів.',
+                ],
                 'price' => 24.95,
                 'stock' => 31,
                 'is_active' => true,
@@ -85,7 +115,10 @@ class ProductSeeder extends Seeder
             ],
             [
                 'category_id' => $accessories?->id,
-                'name' => 'Cable Organizer',
+                'name' => [
+                    'en' => 'Cable Organizer',
+                    'uk' => 'Органайзер для кабелів',
+                ],
                 'sku' => 'CABLE-009',
                 'description' => null,
                 'price' => 8.50,

@@ -1,20 +1,17 @@
-import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.scss', 'resources/js/app.ts'],
+            input: [
+                'resources/css/filament/admin/theme.css',
+            ],
             refresh: true,
         }),
-        vue(),
+        tailwindcss(),
     ],
-    resolve: {
-        alias: {
-            '@': '/resources/js',
-        },
-    },
     server: {
         host: '0.0.0.0',
         port: 5173,
